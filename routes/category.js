@@ -6,7 +6,7 @@ router.get('/', controllerAuth.getAll)
 router.get('/:id', controllerAuth.getById)
 router.delete('/:id', controllerAuth.remove)
 router.post('/', controllerAuth.create)
-router.put('/:id', controllerAuth.update)
+router.patch('/:id', controllerAuth.update)
 
 
 
