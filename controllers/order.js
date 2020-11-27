@@ -1,8 +1,38 @@
 const Order = require("../models/Order")
 const errorHandler = require('../utils/ErrorHandler')
 
+ 
+module.exports.getAll = async function(req, res) {
+    const query = {
+        user: req.user.id
+    }
+    // дата старта
+    if(req.query.start) {
+        query.date = {
+            // >=
+            $gte: req.query.start
+        }
+    }
+    if(req.query.end) {
+        if(!req.query.date) {query.date = { }}
+        query.date['$lte'] = req.query.end
+    }
+    if(req.query.order){
+        query.order = +req.query.order
+    }
+    try {
+        
 
-module.exports.getAll = function(req, res) {
+        const orders = await new Order
+            .find(query)
+            .sotr({date: -1})
+            .skip(+req.query.offset)// приведение к числу
+            .limit(+req.query.limit)
+
+        res.status(200).json(orders)
+    } catch(e) {
+        errorHandler(res, e)
+    }
 
 }
 
